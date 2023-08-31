@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="Oracle" id="Project-8ce" database="Oracle" >
+	<schema name="GETENTRY" >
+		<table name="BIN_TABLE" prior="BIN" >
+			<comment><![CDATA[All details regarding the deleted events/ tickets....]]></comment>
+			<column name="DEL_ID" type="INTEGER" jt="4" mandatory="y" >
+				<comment><![CDATA[Unique Deletion ID]]></comment>
+			</column>
+			<index name="PK_BIN" unique="PRIMARY_KEY" >
+				<comment><![CDATA[Primary Key of Deletion Tab]]></comment>
+				<column name="DEL_ID" />
+			</index>
+		</table>
+		<table name="CLIENT_TABLE" prior="CLIENT_TAB" >
+			<comment><![CDATA[Details of clients...]]></comment>
+			<column name="CLIENT_ID" type="INTEGER" jt="4" mandatory="y" >
+				<comment><![CDATA[Unique ID of the client...]]></comment>
+			</column>
+			<column name="F_NAME" type="VARCHAR2" length="30" jt="12" mandatory="y" >
+				<comment><![CDATA[First Name of the client...]]></comment>
+			</column>
+			<column name="L_NAME" type="VARCHAR2" length="30" jt="12" >
+				<comment><![CDATA[Last Name of the Client...]]></comment>
+			</column>
+			<column name="EMAIL" type="VARCHAR2" length="50" jt="12" mandatory="y" >
+				<comment><![CDATA[Email ID of the client...]]></comment>
+			</column>
+			<column name="PHONE" type="INTEGER" jt="4" mandatory="y" >
+				<comment><![CDATA[Phone number of the client...]]></comment>
+			</column>
+			<index name="PK_CLIENT_TAB" unique="PRIMARY_KEY" >
+				<column name="CLIENT_ID" />
+			</index>
+		</table>
+		<table name="EVENT_REGISTRATION" prior="REGISTRATION" >
+			<comment><![CDATA[Registration table for the Client Side]]></comment>
+			<column name="REG_ID" type="INTEGER" jt="4" mandatory="y" >
+				<comment><![CDATA[Unique ID for registrations]]></comment>
+			</column>
+			<column name="NAME" type="VARCHAR2" length="30" jt="12" mandatory="y" >
+				<comment><![CDATA[Name of the person]]></comment>
+			</column>
+			<column name="EMAIL" type="VARCHAR2" length="50" jt="12" mandatory="y" >
+				<comment><![CDATA[Mail ID of the person]]></comment>
+			</column>
+			<column name="PHONE" type="INTEGER" jt="4" mandatory="y" >
+				<comment><![CDATA[WhatsApp phone number of the person.]]></comment>
+			</column>
+			<column name="EVENT_ID" type="INTEGER" jt="4" mandatory="y" >
+				<comment><![CDATA[Event ID as per the event registered for.]]></comment>
+			</column>
+			<index name="PK_REGISTRATION" unique="PRIMARY_KEY" >
+				<comment><![CDATA[Primary key of registration table]]></comment>
+				<column name="REG_ID" />
+			</index>
+			<fk name="FK_REGISTRATION01" to_schema="GETENTRY" to_table="EVENT_TABLE" >
+				<fk_column name="EVENT_ID" pk="EVENT_ID" />
+				<comment><![CDATA[Event Id of the event tab;]]></comment>
+			</fk>
+		</table>
+		<table name="EVENT_TABLE" prior="EVENT_TAB" >
+			<comment><![CDATA[Details of the event....]]></comment>
+			<column name="EVENT_ID" type="INTEGER" jt="4" mandatory="y" >
+				<comment><![CDATA[Unique event ID...]]></comment>
+			</column>
+			<column name="EVENT_NAME" type="VARCHAR2" length="50" jt="12" mandatory="y" >
+				<comment><![CDATA[Name of the event...]]></comment>
+			</column>
+			<column name="VENUE" type="VARCHAR2" length="50" jt="12" mandatory="y" >
+				<comment><![CDATA[Name oif the hall, or location]]></comment>
+			</column>
+			<column name="DATE" type="DATE" jt="91" mandatory="y" >
+				<comment><![CDATA[Date of the event...]]></comment>
+			</column>
+			<column name="DESCRIPTION" type="VARCHAR2" length="1000" jt="12" >
+				<comment><![CDATA[Brief discription of the event... (Should be atleast 1000 letters)]]></comment>
+			</column>
+			<column name="CLIENT_ID" type="INTEGER" jt="4" mandatory="y" >
+				<comment><![CDATA[Client ID to be referenced from Admin Grp.]]></comment>
+			</column>
+			<index name="PK_EVENT_TAB" unique="PRIMARY_KEY" >
+				<comment><![CDATA[Primary key of Event_Tab]]></comment>
+				<column name="EVENT_ID" />
+			</index>
+			<fk name="FK_EVENT_TAB01" to_schema="GETENTRY" to_table="CLIENT_TABLE" >
+				<fk_column name="CLIENT_ID" pk="CLIENT_ID" />
+				<comment><![CDATA[Foreign Key for Cient_ID from Client Tab]]></comment>
+			</fk>
+		</table>
+		<table name="TRANSACT_ADMIN" prior="TRANSACT_AD" >
+			<comment><![CDATA[Admin side transction table...]]></comment>
+			<column name="TRANSACT_ID" type="INTEGER" jt="4" mandatory="y" >
+				<comment><![CDATA[Unique ID for each  transaction]]></comment>
+			</column>
+			<column name="CLIENT_ID" type="INTEGER" jt="4" mandatory="y" >
+				<comment><![CDATA[Client ID column of Transactions Tab in Admin Grp]]></comment>
+			</column>
+			<index name="PK_TRANSACT_ADM" unique="PRIMARY_KEY" >
+				<comment><![CDATA[Primary Key of Transaction_Tab]]></comment>
+				<column name="TRANSACT_ID" />
+			</index>
+			<fk name="FK_TRANSACT_ADMIN_CLIENT_TAB" to_schema="GETENTRY" to_table="CLIENT_TABLE" >
+				<fk_column name="CLIENT_ID" pk="CLIENT_ID" />
+			</fk>
+		</table>
+		<table name="TRANSACT_CLIENT" >
+			<comment><![CDATA[Transaction table for the user's side]]></comment>
+			<column name="TRANSACT_ID" type="INTEGER" jt="4" mandatory="y" >
+				<comment><![CDATA[Transaction ID of the client...]]></comment>
+			</column>
+			<fk name="FK_TRANSACT_CLIENT" to_schema="GETENTRY" to_table="TRANSACT_ADMIN" >
+				<fk_column name="TRANSACT_ID" pk="TRANSACT_ID" />
+				<comment><![CDATA[roeign key references from the Transact_Admin table from Admin Tables.]]></comment>
+			</fk>
+		</table>
+		<trigger name="New Client User" id="Trigger-851" isSystem="false" >
+			<string><![CDATA[CREATE [OR REPLACE] TRIGGER New_Client 
+ [AFTER] [INSERT] ON CLIENT_TABLE
+ [FOR EACH ROW]
+ [
+    CREATE TABLE GETENTRY.EVENT_TABLE ( 
+    	EVENT_ID             INTEGER   NOT NULL,
+    	EVENT_NAME           VARCHAR2(50)   NOT NULL,
+    	VENUE                VARCHAR2(50)   NOT NULL,
+    	"DATE"               DATE   NOT NULL,
+    	DESCRIPTION          VARCHAR2(1000)   ,
+    	CLIENT_ID            INTEGER   NOT NULL,
+    	CONSTRAINT PK_EVENT_TAB PRIMARY KEY ( EVENT_ID ) 
+     );
+
+    ALTER TABLE GETENTRY.EVENT_TABLE ADD CONSTRAINT FK_EVENT_TAB01 FOREIGN KEY ( CLIENT_ID ) REFERENCES GETENTRY.CLIENT_TABLE( CLIENT_ID );
+
+    COMMENT ON TABLE GETENTRY.EVENT_TABLE IS 'Details of the event....';
+
+    COMMENT ON COLUMN GETENTRY.EVENT_TABLE.EVENT_ID IS 'Unique event ID...';
+
+    COMMENT ON COLUMN GETENTRY.EVENT_TABLE.EVENT_NAME IS 'Name of the event...';
+
+    COMMENT ON COLUMN GETENTRY.EVENT_TABLE.VENUE IS 'Name oif the hall, or location';
+
+    COMMENT ON COLUMN GETENTRY.EVENT_TABLE."DATE" IS 'Date of the event...';
+
+    COMMENT ON COLUMN GETENTRY.EVENT_TABLE.DESCRIPTION IS 'Brief discription of the event... (Should be atleast 1000 letters)';
+
+    COMMENT ON COLUMN GETENTRY.EVENT_TABLE.CLIENT_ID IS 'Client ID to be referenced from Admin Grp.';
+
+ ];]]></string>
+		</trigger>
+	</schema>
+	<connector name="Oracle" database="Oracle" driver_class="oracle.jdbc.driver.OracleDriver" driver_jar="ojdbc11.jar" driver_desc="Connect via Service Name" host="localhost" port="1521" instance="xe" user="getentry" passwd="Z2V0ZW50cnk=" useSystemProxy="false" />
+	<layout name="Main Layout" id="Layout-4ad" show_relation="columns" >
+		<entity schema="GETENTRY" name="BIN_TABLE" color="0000FF" x="80" y="368" />
+		<entity schema="GETENTRY" name="CLIENT_TABLE" color="0000FF" x="352" y="352" />
+		<entity schema="GETENTRY" name="EVENT_REGISTRATION" color="00FF00" x="704" y="480" />
+		<entity schema="GETENTRY" name="EVENT_TABLE" color="00FF00" x="704" y="208" />
+		<entity schema="GETENTRY" name="TRANSACT_ADMIN" color="0000FF" x="64" y="192" />
+		<entity schema="GETENTRY" name="TRANSACT_CLIENT" color="C1D8EE" x="976" y="208" />
+		<callout x="48" y="80" pointer="Round" >
+			<comment><![CDATA[This is a layout. Create new tables by right-clicking the layout. 
+
+Edit tables by double-clicking the table header.]]></comment>
+		</callout>
+		<group name="Admin Tables" color="0000FF" >
+			<comment><![CDATA[All these tables belong to the admin...]]></comment>
+			<entity schema="GETENTRY" name="TRANSACT_ADMIN" />
+			<entity schema="GETENTRY" name="CLIENT_TABLE" />
+			<entity schema="GETENTRY" name="BIN_TABLE" />
+		</group>
+		<group name="Client Tables" color="00FF00" >
+			<comment><![CDATA[All data that the client handles or has...]]></comment>
+			<entity schema="GETENTRY" name="TRANSACT_CLIENT" />
+			<entity schema="GETENTRY" name="EVENT_REGISTRATION" />
+			<entity schema="GETENTRY" name="EVENT_TABLE" />
+		</group>
+	</layout>
+</project>
